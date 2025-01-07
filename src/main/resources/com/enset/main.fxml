@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="com.enset.controllers.MainController">
+    <TableView fx:id="productTable">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" />
+            <TableColumn fx:id="nameColumn" text="Name" />
+            <TableColumn fx:id="quantityColumn" text="Quantity" />
+            <TableColumn fx:id="priceColumn" text="Price" />
+        </columns>
+    </TableView>
+
+    <TextField fx:id="nameField" promptText="Product Name" />
+    <TextField fx:id="quantityField" promptText="Quantity" />
+    <TextField fx:id="priceField" promptText="Price" />
+
+    <Button text="Add Product" onAction="#handleAddProduct" />
+    <Button text="Delete Product" onAction="#handleDeleteProduct" />
+</VBox>
