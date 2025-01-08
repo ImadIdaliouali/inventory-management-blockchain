@@ -8,21 +8,21 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-/**
- * JavaFX App
- */
 public class App extends Application {
 
     private static Scene scene;
+    private static Stage primaryStage;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"), 640, 480);
+        scene = new Scene(loadFXML("login"), 800, 600);
+        primaryStage = stage;
         stage.setScene(scene);
+        stage.setTitle("Inventory Management System");
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
     }
 
@@ -31,8 +31,12 @@ public class App extends Application {
         return fxmlLoader.load();
     }
 
+    public static void changeScene(String fxml) throws IOException {
+        Parent root = loadFXML(fxml);
+        primaryStage.setScene(new Scene(root, 800, 600));
+    }
+
     public static void main(String[] args) {
         launch();
     }
-
 }

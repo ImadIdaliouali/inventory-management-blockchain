@@ -4,11 +4,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import com.enset.models.User;
 import com.enset.services.UserService;
+import com.enset.App;
+
+import java.io.IOException;
 
 public class AuthController {
     @FXML
@@ -20,29 +24,40 @@ public class AuthController {
 
     @FXML
     private void handleLogin() {
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+        String username = usernameField.getText().trim();
+        String password = passwordField.getText().trim();
 
+        // Validate input fields
+        if (username.isEmpty() || password.isEmpty()) {
+            showAlert("Input Error", "Username and password cannot be empty.");
+            return;
+        }
+
+        // Authenticate the user
         User user = userService.authenticate(username, password);
         if (user != null) {
             try {
-                // Load the main application window
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("../main.fxml"));
                 Parent root = loader.load();
 
-                // Pass the logged-in user to the MainController
                 MainController mainController = loader.getController();
                 mainController.setLoggedInUser(user);
 
-                Stage stage = (Stage) usernameField.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.setTitle("Inventory Management");
-            } catch (Exception e) {
+                App.changeScene("main");
+            } catch (IOException e) {
                 e.printStackTrace();
-                System.err.println("Failed to load FXML file: " + e.getMessage());
+                showAlert("Error", "Failed to load the application window.");
             }
         } else {
-            System.out.println("Invalid username or password");
+            showAlert("Login Failed", "Invalid username or password.");
         }
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

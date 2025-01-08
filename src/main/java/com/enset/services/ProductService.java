@@ -68,10 +68,16 @@ public class ProductService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public void deleteProduct(int id) {
+        // Fetch the product details before deleting
+        Product product = getProductById(id);
+        if (product == null) {
+            System.err.println("Product not found with ID: " + id);
+            return;
+        }
+
         String query = "DELETE FROM products WHERE id = ?";
 
         try (PreparedStatement statement = databaseService.prepareStatement(query)) {
@@ -79,9 +85,31 @@ public class ProductService {
             statement.executeUpdate();
 
             // Record transaction on blockchain
-            blockchainService.addTransaction("Product ID: " + id, 0, "REMOVE");
+            blockchainService.addTransaction(product.getName(), product.getQuantity(), "REMOVE");
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Product getProductById(int id) {
+        String query = "SELECT * FROM products WHERE id = ?";
+        Product product = null;
+
+        try (PreparedStatement statement = databaseService.prepareStatement(query)) {
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                product = new Product(
+                        resultSet.getInt("id"),
+                        resultSet.getString("name"),
+                        resultSet.getInt("quantity"),
+                        resultSet.getDouble("price"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return product;
     }
 }
