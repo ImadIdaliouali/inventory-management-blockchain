@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.paint.Color?>
 
 <VBox spacing="20" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
     fx:controller="com.enset.controllers.AuthController"
+    alignment="CENTER"
     style="-fx-background-color: linear-gradient(to bottom right, #3498db, #2c3e50); -fx-padding: 50;">
+
+    <!-- Logo or Image -->
+    <ImageView fitWidth="400" fitHeight="400" preserveRatio="true">
+        <image>
+            <Image url="@./images/logo.png" />
+        </image>
+    </ImageView>
+
     <!-- Login Form -->
-    <VBox spacing="15"
-        style="-fx-background-color: white; -fx-border-color: #2980b9; -fx-border-width: 2; -fx-padding: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 0, 0); -fx-background-radius: 5; -fx-border-radius: 5;">
+    <VBox spacing="15" alignment="CENTER"
+        style="-fx-background-color: rgba(255, 255, 255, 0.9); -fx-border-radius: 10; -fx-background-radius: 10; -fx-padding: 25; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 0);">
         <Label text="Login"
-            style="-fx-font-size: 28; -fx-font-weight: bold; -fx-text-fill: #2c3e50; -fx-effect: dropshadow(one-pass-box, #3498db, 5, 0.2, 0, 1);" />
+            style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+
+        <!-- Username Field -->
         <TextField fx:id="usernameField" promptText="Username"
-            style="-fx-font-size: 14; -fx-padding: 10; -fx-background-color: #ecf0f1; -fx-border-color: #3498db; -fx-border-width: 0 0 2 0; -fx-text-fill: #2c3e50;" />
+            style="-fx-font-size: 14; -fx-padding: 10; -fx-background-color: transparent; -fx-border-color: #3498db; -fx-border-width: 0 0 2 0; -fx-text-fill: #2c3e50; -fx-prompt-text-fill: #95a5a6;" />
+
+        <!-- Password Field -->
         <PasswordField fx:id="passwordField" promptText="Password"
-            style="-fx-font-size: 14; -fx-padding: 10; -fx-background-color: #ecf0f1; -fx-border-color: #3498db; -fx-border-width: 0 0 2 0; -fx-text-fill: #2c3e50;" />
+            style="-fx-font-size: 14; -fx-padding: 10; -fx-background-color: transparent; -fx-border-color: #3498db; -fx-border-width: 0 0 2 0; -fx-text-fill: #2c3e50; -fx-prompt-text-fill: #95a5a6;" />
+
+        <!-- Login Button -->
         <Button text="Login" onAction="#handleLogin"
-            style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-size: 14; -fx-padding: 10 20; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 5, 0, 0, 0); -fx-background-radius: 5;" />
+            style="-fx-background-color: #2980b9; -fx-text-fill: white; -fx-font-size: 14; -fx-padding: 10 20; -fx-cursor: hand; -fx-background-radius: 5; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0);" />
     </VBox>
 </VBox>
