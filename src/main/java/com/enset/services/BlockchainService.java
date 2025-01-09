@@ -9,8 +9,8 @@ import org.web3j.tx.gas.DefaultGasProvider;
 import com.enset.contracts.Inventory;
 
 public class BlockchainService {
-    private static final String CONTRACT_ADDRESS = "0x5fe63f669bd7f6442da83312b4e18a30c185f70c";
-    private static final String PRIVATE_KEY = "0x51e77f0b5e3d3e9609556d9bb83ad001db6bc302a4a725125d3236f1dadd01af";
+    private static final String CONTRACT_ADDRESS = "0x746bbe0397f2c83b98c9ea6d526f30735fe685a6";
+    private static final String PRIVATE_KEY = "0x76f05b239620e8b51d4c66ede5f3ca027e96bf21aab36737a5662bc60ca09e63";
     private static final String RPC_URL = "http://127.0.0.1:8545";
 
     private Web3j web3j;

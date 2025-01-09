@@ -66,6 +66,7 @@ public class Inventory extends Contract {
         _addresses = new HashMap<String, String>();
         _addresses.put("1736348784756", "0x5fE63F669bD7F6442DA83312b4e18A30C185f70c");
         _addresses.put("1736335134248", "0xa44C2f3D91Fb45176d9aE312f3F225C99bFAa0E8");
+        _addresses.put("5777", "0x746BBE0397F2C83B98C9EA6d526F30735fe685a6");
     }
 
     @Deprecated

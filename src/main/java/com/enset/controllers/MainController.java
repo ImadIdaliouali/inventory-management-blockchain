@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.FileChooser;
 import com.enset.models.Product;
 import com.enset.models.Transaction;
 import com.enset.models.User;
@@ -12,8 +13,17 @@ import com.enset.services.ProductService;
 import com.enset.services.BlockchainService;
 import com.enset.App;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Optional;
+
+// Apache POI imports for Excel
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class MainController {
     @FXML
@@ -50,6 +60,9 @@ public class MainController {
     @FXML
     private Label userNameLabel;
 
+    @FXML
+    private TextArea reportTextArea;
+
     private ProductService productService = new ProductService();
     private BlockchainService blockchainService = new BlockchainService();
     private User loggedInUser;
@@ -61,8 +74,6 @@ public class MainController {
             userNameLabel.setText(user.getUsername());
             userNameLabel.requestLayout(); // Force UI refresh
             userNameLabel.applyCss(); // Apply CSS styles
-        } else {
-
         }
     }
 
@@ -201,6 +212,104 @@ public class MainController {
                 e.printStackTrace();
                 showAlert("Logout Error", "An error occurred while logging out.", Alert.AlertType.ERROR);
             }
+        }
+    }
+
+    @FXML
+    private void handleGenerateReport() {
+        // Generate the report and save it as an Excel file
+        saveReportToExcel();
+    }
+
+    private void saveReportToExcel() {
+        // Clear the TextArea before starting
+        reportTextArea.clear();
+        reportTextArea.appendText("Starting report generation...\n");
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save Report");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Excel Files", "*.xlsx"));
+
+        // Set the default file name
+        fileChooser.setInitialFileName("inventory_report.xlsx");
+        reportTextArea.appendText("Default file name set to 'inventory_report.xlsx'.\n");
+
+        File file = fileChooser.showSaveDialog(productTable.getScene().getWindow());
+
+        if (file != null) {
+            // Ensure the file has the .xlsx extension
+            String filePath = file.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".xlsx")) {
+                file = new File(filePath + ".xlsx");
+                reportTextArea.appendText("Appended .xlsx extension to the file name.\n");
+            }
+
+            try (Workbook workbook = new XSSFWorkbook()) {
+                reportTextArea.appendText("Workbook created.\n");
+
+                // Create a sheet for products
+                Sheet productSheet = workbook.createSheet("Products");
+                reportTextArea.appendText("Created 'Products' sheet.\n");
+
+                // Create headers for products
+                Row productHeaderRow = productSheet.createRow(0);
+                String[] productHeaders = { "ID", "Name", "Quantity", "Price" };
+                for (int i = 0; i < productHeaders.length; i++) {
+                    Cell cell = productHeaderRow.createCell(i);
+                    cell.setCellValue(productHeaders[i]);
+                }
+                reportTextArea.appendText("Added headers to 'Products' sheet.\n");
+
+                // Add product data
+                int productRowNum = 1;
+                for (Product product : productTable.getItems()) {
+                    Row row = productSheet.createRow(productRowNum++);
+                    row.createCell(0).setCellValue(product.getId());
+                    row.createCell(1).setCellValue(product.getName());
+                    row.createCell(2).setCellValue(product.getQuantity());
+                    row.createCell(3).setCellValue(product.getPrice());
+                }
+                reportTextArea.appendText("Added product data to 'Products' sheet.\n");
+
+                // Create a sheet for transactions
+                Sheet transactionSheet = workbook.createSheet("Transactions");
+                reportTextArea.appendText("Created 'Transactions' sheet.\n");
+
+                // Create headers for transactions
+                Row transactionHeaderRow = transactionSheet.createRow(0);
+                String[] transactionHeaders = { "ID", "Product Name", "Quantity", "Action", "Timestamp" };
+                for (int i = 0; i < transactionHeaders.length; i++) {
+                    Cell cell = transactionHeaderRow.createCell(i);
+                    cell.setCellValue(transactionHeaders[i]);
+                }
+                reportTextArea.appendText("Added headers to 'Transactions' sheet.\n");
+
+                // Add transaction data
+                int transactionRowNum = 1;
+                for (Transaction transaction : transactionTable.getItems()) {
+                    Row row = transactionSheet.createRow(transactionRowNum++);
+                    row.createCell(0).setCellValue(transaction.getId());
+                    row.createCell(1).setCellValue(transaction.getProductName());
+                    row.createCell(2).setCellValue(transaction.getQuantity());
+                    row.createCell(3).setCellValue(transaction.getAction());
+                    row.createCell(4).setCellValue(transaction.getTimestampAsString());
+                }
+                reportTextArea.appendText("Added transaction data to 'Transactions' sheet.\n");
+
+                // Write the output to a file
+                try (FileOutputStream fileOut = new FileOutputStream(file)) {
+                    workbook.write(fileOut);
+                    reportTextArea.appendText("Workbook written to file: " + file.getAbsolutePath() + "\n");
+                    showAlert("Report Saved", "The report has been saved successfully as an Excel file.",
+                            Alert.AlertType.INFORMATION);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                reportTextArea.appendText("Error: " + e.getMessage() + "\n");
+                showAlert("Error", "An error occurred while saving the report.", Alert.AlertType.ERROR);
+            }
+        } else {
+            reportTextArea.appendText("Report generation canceled by the user.\n");
         }
     }
 

@@ -98,5 +98,19 @@
                 </TableView>
             </VBox>
         </Tab>
+
+        <!-- Add this tab to the TabPane -->
+        <Tab text="Report" closable="false">
+            <VBox spacing="10" style="-fx-padding: 10;">
+                <!-- TextArea to display the report -->
+                <TextArea fx:id="reportTextArea" editable="false" wrapText="true"
+                    style="-fx-font-size: 12; -fx-background-color: white; -fx-border-color: #3498db; -fx-border-width: 1; -fx-border-radius: 5; -fx-background-radius: 5;"
+                    VBox.vgrow="ALWAYS" />
+
+                <!-- Button to generate the report -->
+                <Button text="Generate Report" onAction="#handleGenerateReport"
+                    style="-fx-background-color: #8e44ad; -fx-text-fill: white; -fx-font-size: 12; -fx-cursor: hand; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 5, 0, 0, 0); -fx-background-radius: 5;" />
+            </VBox>
+        </Tab>
     </TabPane>
 </VBox>
